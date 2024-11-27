@@ -10,5 +10,10 @@
         public float Estoque { get; set; }
         public DateTime DataCadastro { get; set; }
 
+        //Mapeira para a chave estrangeira no BD
+        public int CategotiaId {  get; set; }
+        //Propriedade de navegação para indicar que Produto esta relacionado com categoria
+        public Categoria? Categoria { get; set; }
+
     }
 }

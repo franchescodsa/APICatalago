@@ -1,4 +1,5 @@
 ﻿using APICatalago.Context;
+using APICatalago.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,10 +15,26 @@ namespace APICatalago.Controllers
 Palavra-chave readonly: Garante que a variável só possa ser inicializada ou 
         atribuída dentro do construtor, aumentando a segurança e a imutabilidade.*/
         private readonly AppDbContext _context;
-
+        /*
+         Função: Injeta a dependência do contexto de banco de dados no controlador.
+A injeção de dependência é feita automaticamente pelo framework 
+        (caso o AppDbContext esteja registrado no contêiner de serviços no método Startup.
+        ConfigureServices).
+Objetivo: Permitir que o controlador acesse o banco de dados por meio do _context.*/
         public ProdutosController(AppDbContext context)
         {
             _context = context;
+        }
+        //Metodo action que vai retorna umalista de produtos
+        [HttpGet]
+        public ActionResult<IEnumerable<Produto>> Get()
+        {
+            var produtos = _context.Produtos.ToList();
+            if(produtos is null)
+            {
+                return NotFound("Produtos não encontrados");
+            }
+                return produtos;
         }
     }
 }

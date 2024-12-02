@@ -27,7 +27,7 @@ namespace APICatalago.Models
         public DateTime DataCadastro { get; set; }
 
         //Mapeira para a chave estrangeira no BD
-        public int CategotiaId {  get; set; }
+        public int CategoriaId {  get; set; }
         //Propriedade de navegação para indicar que Produto esta relacionado com categoria
         public Categoria? Categoria { get; set; }
 

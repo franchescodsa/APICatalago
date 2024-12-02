@@ -20,7 +20,7 @@ namespace APICatalago.Models
 
         [Required]
         [StringLength(300)]
-        public string? ImagemgUrl { get; set; }
+        public string? ImagemUrl { get; set; }
         //Relacionamento um-para-muitos. Ctaregoria é uma chave estrangeito de produto. 
         public ICollection<Produto>? Produtos { get; set; }
     }

@@ -25,7 +25,7 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
         {
             _context = context;
         }
-        //Metodo action que vai retorna umalista de produtos
+        //Metodo action que vai retorna uma lista de produtos
         [HttpGet]
         public ActionResult<IEnumerable<Produto>> Get()
         {
@@ -35,6 +35,19 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
                 return NotFound("Produtos não encontrados");
             }
                 return produtos;
+        }
+        //Metodo actions para retornar produto pelo ID 
+        [HttpGet("{id:int}")]
+       
+        public ActionResult< Produto> Get(int id)
+        {
+            var produto = _context.Produtos.FirstOrDefault(p=> p.ProdutoId == id);
+            if (produto is null)
+            {
+                return NotFound("Íd não encontrado");
+            }
+            return produto;
+
         }
     }
 }

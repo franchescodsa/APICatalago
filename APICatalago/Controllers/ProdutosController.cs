@@ -37,7 +37,7 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
                 return produtos;
         }
         //Metodo actions para retornar produto pelo ID 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name="ObterProduto")]
        
         public ActionResult< Produto> Get(int id)
         {
@@ -47,6 +47,25 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
                 return NotFound("Íd não encontrado");
             }
             return produto;
+
+        }
+        //Método action para cadastrar POST
+        [HttpPost]
+        public ActionResult Post(Produto produto)
+        {
+            if (produto is null)
+            
+                return BadRequest();
+
+                _context.Produtos.Add(produto);
+                _context.SaveChanges();
+
+                // 201 created e aciona a rota ObterProduto
+                return new CreatedAtRouteResult("ObterProduto", new
+                {
+                    id = produto.ProdutoId
+                }, produto);
+            
 
         }
     }

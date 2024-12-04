@@ -2,6 +2,7 @@
 using APICatalago.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace APICatalago.Controllers
 {
@@ -67,6 +68,18 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
                 }, produto);
             
 
+        }
+        //Metodo para atualizar\editar produto
+        [HttpPut("{id:int}")]
+        public ActionResult Put(int id, Produto produto) { 
+            if(id != produto.ProdutoId)
+            {
+                return BadRequest();
+            }
+            _context.Entry(produto).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return Ok(produto);
         }
     }
 }

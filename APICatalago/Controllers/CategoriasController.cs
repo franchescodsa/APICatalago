@@ -21,13 +21,13 @@ namespace APICatalogo.Controllers
         //retornar categoria com produto
         public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
-            return _context.Categorias.Include(p=>p.Produtos).ToList();
+            return _context.Categorias.Include(p=>p.Produtos).AsNoTracking().ToList();
         }
         // retornar todas categorias
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
-            return _context.Categorias.ToList();
+            return _context.Categorias.AsNoTracking().ToList();
         }
         // etornar categoria pelo ID
         [HttpGet("{id:int}", Name = "ObterCategoria")]

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace APICatalago.Models
 {
@@ -29,6 +30,8 @@ namespace APICatalago.Models
         //Mapeira para a chave estrangeira no BD
         public int CategoriaId {  get; set; }
         //Propriedade de navegação para indicar que Produto esta relacionado com categoria
+
+        [JsonIgnore]
         public Categoria? Categoria { get; set; }
 
     }

@@ -28,9 +28,9 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
         }
         //Metodo action que vai retorna uma lista de produtos
         [HttpGet]
-        public ActionResult<IEnumerable<Produto>> Get()
+        public async Task<ActionResult<IEnumerable<Produto>>> Get()
         {
-            var produtos = _context.Produtos.AsNoTracking().ToList();
+            var produtos = await _context.Produtos.AsNoTracking().ToListAsync();
             if(produtos is null)
             {
                 return NotFound("Produtos não encontrados");
@@ -38,11 +38,12 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
                 return produtos;
         }
         //Metodo actions para retornar produto pelo ID 
-        [HttpGet("{id:int}", Name="ObterProduto")]
+        [HttpGet("{id}", Name="ObterProduto")] // passar um Id maio ou igual a 1
        
-        public ActionResult< Produto> Get(int id)
+        public async Task<ActionResult<Produto>> Get(int id)
         {
-            var produto = _context.Produtos.FirstOrDefault(p=> p.ProdutoId == id);
+            var produto = await _context.Produtos.AsNoTracking()
+                .FirstOrDefaultAsync(p=> p.ProdutoId == id);
             if (produto is null)
             {
                 return NotFound("Íd não encontrado");

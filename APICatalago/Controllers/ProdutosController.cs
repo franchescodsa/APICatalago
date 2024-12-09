@@ -2,6 +2,7 @@
 using APICatalago.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace APICatalago.Controllers
@@ -38,10 +39,11 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
                 return produtos;
         }
         //Metodo actions para retornar produto pelo ID 
-        [HttpGet("{id}", Name="ObterProduto")] // passar um Id maio ou igual a 1
+        [HttpGet("{id:int:min(1)}", Name="ObterProduto")] // passar um Id maio ou igual a 1
        
-        public async Task<ActionResult<Produto>> Get(int id)
+        public async Task<ActionResult<Produto>> Get([FromQuery]int id)
         {
+            
             var produto = await _context.Produtos.AsNoTracking()
                 .FirstOrDefaultAsync(p=> p.ProdutoId == id);
             if (produto is null)

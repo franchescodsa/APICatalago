@@ -41,7 +41,7 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
         //Metodo actions para retornar produto pelo ID 
         [HttpGet("{id:int:min(1)}", Name="ObterProduto")] // passar um Id maio ou igual a 1
        
-        public async Task<ActionResult<Produto>> Get([FromQuery]int id)
+        public async Task<ActionResult<Produto>> Get(int id)
         {
             
             var produto = await _context.Produtos.AsNoTracking()

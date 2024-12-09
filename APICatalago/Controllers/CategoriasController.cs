@@ -1,5 +1,6 @@
 ﻿using APICatalago.Context;
 using APICatalago.Models;
+using APICatalogo.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,17 +12,38 @@ namespace APICatalogo.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly AppDbContext _context;
-
-        public CategoriasController(AppDbContext context)
+        private readonly IMeuServico _meuServico;
+        public CategoriasController(AppDbContext context, IMeuServico meuServico)
         {
             _context = context;
         }
-
+        [HttpGet("UsandoFromService/{nome}")]
+        public ActionResult<string> GetSaudacaoFromService([FromServices] IMeuServico meuServico, 
+            string nome)
+        {
+            return meuServico.Saudacao(nome);
+        }
+        [HttpGet("SemUsarFromService/{nome}")]
+        public ActionResult<string> GetSaudacaoSemFromService(IMeuServico meuServico,
+           string nome)
+        {
+            return meuServico.Saudacao(nome);
+        }
         [HttpGet("produtos")]
         //retornar categoria com produto
         public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
-            return _context.Categorias.Include(p=>p.Produtos).AsNoTracking().ToList();
+            
+            try
+            {
+               return _context.Categorias.Include(p=>p.Produtos).AsNoTracking().ToList();
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ocorreu um problema ao tratar a sua solicitação");
+            }
         }
         // retornar todas categorias
         [HttpGet]

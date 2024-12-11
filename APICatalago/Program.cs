@@ -1,6 +1,7 @@
 
 using APICatalago.Context;
 using APICatalogo.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -28,6 +29,12 @@ namespace APICatalago
                                     ServerVersion.AutoDetect(mySqlConnection)));
 
             builder.Services.AddTransient<IMeuServico, MeuServico>();
+
+            //Desabilitando mecanismo de inferencia da infeção de dependecia dos controladores
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.DisableImplicitFromServicesParameters = true;
+            });
 
             var app = builder.Build();
 

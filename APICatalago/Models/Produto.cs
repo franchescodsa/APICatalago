@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace APICatalago.Models
 {
     [Table("Produtos")]
-    public class Produto
+    public class Produto :IValidatableObject
     {
         [Key]
         public int ProdutoId { get; set; }
@@ -39,5 +39,22 @@ namespace APICatalago.Models
         [JsonIgnore]
         public Categoria? Categoria { get; set; }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (!string.IsNullOrEmpty(this.Nome))
+            {
+                var primeraLetra = this.Nome[0].ToString();
+                if (primeraLetra != primeraLetra.ToUpper())
+                {
+                    yield return new
+                        ValidationResult("A primeira letra do produto deve ser maiuscula",
+                        new[]{nameof(this.Nome)
+
+                        });
+                }
+            }
+            //Verififcação se a primiera letra é maiuscula
+            
+        }
     }
 }

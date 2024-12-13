@@ -12,7 +12,7 @@ namespace APICatalogo.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly IMeuServico _meuServico;
+        //private readonly IMeuServico _meuServico;
         public CategoriasController(AppDbContext context, IMeuServico meuServico)
         {
             _context = context;
@@ -66,6 +66,8 @@ namespace APICatalogo.Controllers
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public ActionResult<Categoria> Get(int id)
         {
+
+            //throw new Exception("EXCEÇÃO AO RETORNAR A CATEGORIA PLEO ID");
             try
             {
                 var categoria = _context.Categorias.FirstOrDefault(p => p.CategoriaId == id);

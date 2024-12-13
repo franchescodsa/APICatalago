@@ -1,11 +1,11 @@
 ﻿using APICatalago.Context;
-using APICatalago.Models;
+using APICatalogo.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
-namespace APICatalago.Controllers
+namespace APICatalogo.Controllers
 {
     [Route("[controller]")] //Rpta base para o controlador 
     [ApiController]
@@ -32,20 +32,20 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
         public async Task<ActionResult<IEnumerable<Produto>>> Get()
         {
             var produtos = await _context.Produtos.AsNoTracking().ToListAsync();
-            if(produtos is null)
+            if (produtos is null)
             {
                 return NotFound("Produtos não encontrados");
             }
-                return produtos;
+            return produtos;
         }
         //Metodo actions para retornar produto pelo ID 
-        [HttpGet("{id:int:min(1)}", Name="ObterProduto")] // passar um Id maio ou igual a 1
-       
+        [HttpGet("{id:int:min(1)}", Name = "ObterProduto")] // passar um Id maio ou igual a 1
+
         public async Task<ActionResult<Produto>> Get(int id)
         {
-            
+
             var produto = await _context.Produtos.AsNoTracking()
-                .FirstOrDefaultAsync(p=> p.ProdutoId == id);
+                .FirstOrDefaultAsync(p => p.ProdutoId == id);
             if (produto is null)
             {
                 return NotFound("Íd não encontrado");
@@ -58,24 +58,25 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
         public ActionResult Post(Produto produto)
         {
             if (produto is null)
-            
+
                 return BadRequest();
 
-                _context.Produtos.Add(produto);
-                _context.SaveChanges();
+            _context.Produtos.Add(produto);
+            _context.SaveChanges();
 
-                // 201 created e aciona a rota ObterProduto
-                return new CreatedAtRouteResult("ObterProduto", new
-                {
-                    id = produto.ProdutoId
-                }, produto);
-            
+            // 201 created e aciona a rota ObterProduto
+            return new CreatedAtRouteResult("ObterProduto", new
+            {
+                id = produto.ProdutoId
+            }, produto);
+
 
         }
         //Metodo para atualizar\editar produto
         [HttpPut("{id:int}")]
-        public ActionResult Put(int id, Produto produto) { 
-            if(id != produto.ProdutoId)
+        public ActionResult Put(int id, Produto produto)
+        {
+            if (id != produto.ProdutoId)
             {
                 return BadRequest();
             }
@@ -90,7 +91,7 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
         {
             //localizar produtopor id
             var produto = _context.Produtos.FirstOrDefault(p => p.ProdutoId == id);
-            if(produto is null)
+            if (produto is null)
             {
                 return NotFound("Produto não encontrado");
             }
@@ -101,6 +102,6 @@ Objetivo: Permitir que o controlador acesse o banco de dados por meio do _contex
 
         }
 
-        
+
     }
 }

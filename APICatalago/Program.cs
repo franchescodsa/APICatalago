@@ -1,5 +1,6 @@
 
 using APICatalago.Context;
+using APICatalogo.Extensions;
 using APICatalogo.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,7 @@ namespace APICatalago
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.ConfigureExceptionsHandler();
             }
 
             app.UseHttpsRedirection();

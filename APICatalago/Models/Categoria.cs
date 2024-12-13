@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using APICatalogo.Models;
+using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

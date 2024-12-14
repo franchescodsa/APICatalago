@@ -1,5 +1,6 @@
 ﻿using APICatalago.Context;
 using APICatalago.Models;
+using APICatalogo.Filters;
 using APICatalogo.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,23 +13,12 @@ namespace APICatalogo.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly AppDbContext _context;
-        //private readonly IMeuServico _meuServico;
-        public CategoriasController(AppDbContext context, IMeuServico meuServico)
+        public CategoriasController(AppDbContext context)
         {
             _context = context;
         }
-        [HttpGet("UsandoFromService/{nome}")]
-        public ActionResult<string> GetSaudacaoFromService([FromServices] IMeuServico meuServico, 
-            string nome)
-        {
-            return meuServico.Saudacao(nome);
-        }
-        [HttpGet("SemUsarFromService/{nome}")]
-        public ActionResult<string> GetSaudacaoSemFromService(IMeuServico meuServico,
-           string nome)
-        {
-            return meuServico.Saudacao(nome);
-        }
+        //private readonly IMeuServico _meuServico;
+
         [HttpGet("produtos")]
         //retornar categoria com produto
         public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
@@ -47,6 +37,7 @@ namespace APICatalogo.Controllers
         }
         // retornar todas categorias
         [HttpGet]
+        [ServiceFilter(typeof(ApiLoggingFilter))]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
             try
@@ -62,7 +53,7 @@ namespace APICatalogo.Controllers
             }
            
         }
-        // etornar categoria pelo ID
+        // retornar categoria pelo ID
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public ActionResult<Categoria> Get(int id)
         {

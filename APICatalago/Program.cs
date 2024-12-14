@@ -1,6 +1,7 @@
 
 using APICatalago.Context;
 using APICatalogo.Extensions;
+using APICatalogo.Filters;
 using APICatalogo.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,7 @@ namespace APICatalago
                                     options.UseMySql(mySqlConnection, 
                                     ServerVersion.AutoDetect(mySqlConnection)));
 
-            builder.Services.AddTransient<IMeuServico, MeuServico>();
+            builder.Services.AddScoped<ApiLoggingFilter>();
 
             //Desabilitando mecanismo de inferencia da infeção de dependecia dos controladores
             builder.Services.Configure<ApiBehaviorOptions>(options =>

@@ -2,6 +2,7 @@
 using APICatalago.Context;
 using APICatalogo.Extensions;
 using APICatalogo.Filters;
+using APICatalogo.Logging;
 using APICatalogo.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace APICatalago
 {
     public class Program
     {
+        
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -32,11 +34,18 @@ namespace APICatalago
 
             builder.Services.AddScoped<ApiLoggingFilter>();
 
-            //Desabilitando mecanismo de inferencia da infeção de dependecia dos controladores
+            /*Desabilitando mecanismo de inferencia da infeção de dependecia dos controladores
             builder.Services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.DisableImplicitFromServicesParameters = true;
-            });
+            });*/
+
+            //Add o provedor de log personalizado(CustomLoggerProvider) ao sistmea de log ASP.NET Core,
+            //Definindo o nivel minimo delog como LogLevel.Infomatiom
+            builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
+            {
+                LogLevel = LogLevel.Information
+            }));
 
             var app = builder.Build();
 

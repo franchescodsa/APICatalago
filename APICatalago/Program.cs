@@ -18,10 +18,15 @@ namespace APICatalago
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-                                              //Referecia siclica
-            builder.Services.AddControllers().AddJsonOptions(options=>
-            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddControllers(options =>
+            {
+                //Add o filatro criado como filtro gloBal
+                options.Filters.Add(typeof(ApiExceptionFilter));
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            });                        
+            
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

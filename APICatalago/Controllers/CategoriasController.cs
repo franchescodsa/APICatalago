@@ -26,6 +26,7 @@ namespace APICatalogo.Controllers
             
             try
             {
+                
                return _context.Categorias.Include(p=>p.Produtos).AsNoTracking().ToList();
             }
             catch (Exception)

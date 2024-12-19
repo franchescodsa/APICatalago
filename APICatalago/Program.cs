@@ -1,5 +1,6 @@
 
 using APICatalago.Context;
+using APICatalago.Repositories;
 using APICatalogo.Extensions;
 using APICatalogo.Filters;
 using APICatalogo.Logging;
@@ -25,19 +26,23 @@ namespace APICatalago
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-            });                        
+            });
             
+
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             //String de conexao BD
 
             string mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+
             builder.Services.AddDbContext<AppDbContext>(options =>
                                     options.UseMySql(mySqlConnection, 
                                     ServerVersion.AutoDetect(mySqlConnection)));
 
             builder.Services.AddScoped<ApiLoggingFilter>();
+            builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
             /*Desabilitando mecanismo de inferencia da infeção de dependecia dos controladores
             builder.Services.Configure<ApiBehaviorOptions>(options =>

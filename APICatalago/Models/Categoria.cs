@@ -3,8 +3,9 @@ using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace APICatalago.Models
+namespace APICatalogo.Models
 {
     [Table("Categorias")]
     public class Categoria
@@ -23,6 +24,7 @@ namespace APICatalago.Models
         [StringLength(300)]
         public string? ImagemUrl { get; set; }
         //Relacionamento um-para-muitos. Ctaregoria é uma chave estrangeito de produto. 
+        [JsonIgnore]
         public ICollection<Produto>? Produtos { get; set; }
     }
 }

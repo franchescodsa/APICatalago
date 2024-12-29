@@ -1,5 +1,5 @@
-﻿
-using APICatalago.Repositories;
+﻿using APICatalogo.Models;
+using APICatalogo.Repositories;
 using APICatalogo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -12,10 +12,10 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class ProdutosController : ControllerBase
     {
-        private readonly IProdutoRepository _repository;
+        private readonly IRepository<Produto> _repository;
         private readonly ILogger<ProdutosController> _logger;
 
-        public ProdutosController(IProdutoRepository repository, ILogger<ProdutosController> logger)
+        public ProdutosController(IRepository<Produto> repository, ILogger<ProdutosController> logger)
         {
             _repository = repository;
             _logger = logger;
@@ -63,13 +63,7 @@ namespace APICatalogo.Controllers
                 return BadRequest("Dados inválidos");
             }
 
-            var updateResult = await Task.Run(() => _repository.UpdateAsync(produto));
-            if (!updateResult)
-            {
-                _logger.LogWarning($"Erro ao atualizar o produto com id={id}.");
-                return StatusCode(500, "Erro ao atualizar o produto.");
-            }
-
+            await _repository.UpdateAsync(produto);
             return Ok(produto);
         }
 
@@ -84,13 +78,7 @@ namespace APICatalogo.Controllers
                 return NotFound($"Produto com id={id} não encontrado...");
             }
 
-            var deleteResult = await Task.Run(() => _repository.DeleteAsync(id));
-            if (!deleteResult)
-            {
-                _logger.LogWarning($"Erro ao deletar o produto com id={id}.");
-                return StatusCode(500, "Erro ao deletar o produto.");
-            }
-
+            await _repository.DeleteAsync(id);
             return Ok(produto);
         }
     }

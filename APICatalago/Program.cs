@@ -44,7 +44,8 @@ namespace APICatalago
             builder.Services.AddScoped<ApiLoggingFilter>();
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
-            builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            //builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 
             /*Desabilitando mecanismo de inferencia da infeção de dependecia dos controladores

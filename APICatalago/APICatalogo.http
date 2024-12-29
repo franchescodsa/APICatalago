@@ -1,0 +1,9 @@
+﻿@APICatalogo_HostAddress = https://localhost:44321
+
+GET {{APICatalogo_HostAddress}}/categorias
+Accept: Application/json
+###
+GET {{APICatalogo_HostAddress}}/categorias
+Content-Type: Application/json
+
+###

@@ -1,16 +1,8 @@
-using APICatalago.Models;
-using APICatalogo.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using APICatalogo.Models;
 
-namespace APICatalago.Repositories
+namespace APICatalogo.Repositories;
+
+public interface IProdutoRepository : IRepository<Produto>
 {
-    public interface IProdutoRepository
-    {
-        Task<IQueryable<Produto>> GetAllAsync();
-        Task<Produto?> GetByIdAsync(int id);
-        Task AddAsync(Produto produto);
-        Task bool UpdateAsync(Produto produto);
-        Task bool DeleteAsync(int id);
-    }
+    IEnumerable<Produto> GetProdutosPorCategoria(int id);
 }

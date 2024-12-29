@@ -1,13 +1,7 @@
-using APICatalago.Models;
+﻿using APICatalogo.Models;
 
-namespace APICatalago.Repositories
+namespace APICatalogo.Repositories;
+
+public interface ICategoriaRepository : IRepository<Categoria>
 {
-    public interface ICategoriaRepository
-    {
-        Task<IEnumerable<Categoria>> GetCategoriasAsyc();
-        Task<Categoria?> GetIdAsync(int id);
-        Task CreateAsync(Categoria categoria);
-        Task UpdateAsync(Categoria categoria);
-        Task DeleteAsync(int id);
-    }
 }

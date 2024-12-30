@@ -1,6 +1,6 @@
 
 using APICatalago.Context;
-using APICatalago.Repositories;
+using APICatalogo.Repositories;
 using APICatalogo.Extensions;
 using APICatalogo.Filters;
 using APICatalogo.Logging;
@@ -44,7 +44,7 @@ namespace APICatalago
             builder.Services.AddScoped<ApiLoggingFilter>();
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
-            //builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 

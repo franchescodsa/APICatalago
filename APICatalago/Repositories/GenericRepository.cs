@@ -1,4 +1,4 @@
-﻿using APICatalogo.Context;
+﻿using APICatalago.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

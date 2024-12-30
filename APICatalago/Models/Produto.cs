@@ -1,4 +1,4 @@
-﻿using APICatalago.Models;
+﻿using APICatalogo.Models;
 using APICatalogo.Validations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

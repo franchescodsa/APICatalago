@@ -1,6 +1,6 @@
 ﻿using APICatalogo.Models;
 using APICatalogo.Repositories;
-using APICatalogo.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -12,25 +12,34 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class ProdutosController : ControllerBase
     {
+        private readonly IProdutoRepository _produtoRepository;
         private readonly IRepository<Produto> _repository;
         private readonly ILogger<ProdutosController> _logger;
 
-        public ProdutosController(IRepository<Produto> repository, ILogger<ProdutosController> logger)
+
+        public ProdutosController(IRepository<Produto> repository, ILogger<ProdutosController> logger, IProdutoRepository produtoRepository)
         {
             _repository = repository;
+            _produtoRepository = produtoRepository;
             _logger = logger;
+
+        }
+        [HttpGet("produtos/{id}")]
+        public ActionResult<IEnumerable<Produto>> GetProdutosPorCategoria(int id)
+        {
+            return Ok(_produtoRepository.GetProdutosPorCategoria(id));
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Produto>>> Get()
+        public ActionResult<IEnumerable<Produto>> Get()
         {
-            return Ok(await _repository.GetAllAsync());
+            return Ok(_repository.GetAll());
         }
 
         [HttpGet("{id:int}", Name = "ObterProduto")]
-        public async Task<ActionResult<Produto>> Get(int id)
+        public ActionResult<Produto> Get(int id)
         {
-            var produto = await _repository.GetByIdAsync(id);
+            var produto =_repository.Get(c=> c.ProdutoId== id);
 
             if (produto == null)
             {
@@ -41,7 +50,7 @@ namespace APICatalogo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Produto produto)
+        public ActionResult Post(Produto produto)
         {
             if (produto is null)
             {
@@ -49,13 +58,13 @@ namespace APICatalogo.Controllers
                 return BadRequest("Dados inválidos");
             }
 
-            await _repository.AddAsync(produto);
+            _repository.Create(produto);
 
             return new CreatedAtRouteResult("ObterProduto", new { id = produto.ProdutoId }, produto);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, Produto produto)
+        public ActionResult Put(int id, Produto produto)
         {
             if (id != produto.ProdutoId)
             {
@@ -63,22 +72,22 @@ namespace APICatalogo.Controllers
                 return BadRequest("Dados inválidos");
             }
 
-            await _repository.UpdateAsync(produto);
+            _repository.Update(produto);
             return Ok(produto);
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var produto = await _repository.GetByIdAsync(id);
+            var produto = _repository.Get(p=> p.ProdutoId == id);
 
             if (produto == null)
             {
                 _logger.LogWarning($"Produto com id={id} não encontrado...");
-                return NotFound($"Produto com id={id} não encontrado...");
+                
             }
 
-            await _repository.DeleteAsync(id);
+            _repository.Delete(produto);
             return Ok(produto);
         }
     }

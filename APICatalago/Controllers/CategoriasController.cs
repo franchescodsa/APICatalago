@@ -1,6 +1,6 @@
 ﻿using APICatalogo.Models;
 using APICatalogo.Repositories;
-using APICatalogo.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -22,15 +22,16 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categoria>>> Get()
+        public ActionResult<IEnumerable<Categoria>>Get()
         {
-            return Ok(await _repository.GetAllAsync());
+            var categorias = _repository.GetAll();
+            return Ok(categorias);
         }
 
         [HttpGet("{id:int}", Name = "ObterCategoria")]
-        public async Task<ActionResult<Categoria>> Get(int id)
+        public ActionResult<Categoria> Get(int id)
         {
-            var categoria = await _repository.GetByIdAsync(id);
+            var categoria = _repository.Get(c=>c.CategoriaId==id);
 
             if (categoria == null)
             {
@@ -41,7 +42,7 @@ namespace APICatalogo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Categoria categoria)
+        public ActionResult Post(Categoria categoria)
         {
             if (categoria is null)
             {
@@ -49,13 +50,13 @@ namespace APICatalogo.Controllers
                 return BadRequest("Dados inválidos");
             }
 
-            await _repository.AddAsync(categoria);
+          var categoriaCriada =_repository.Create(categoria);
 
             return new CreatedAtRouteResult("ObterCategoria", new { id = categoria.CategoriaId }, categoria);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, Categoria categoria)
+        public ActionResult Put(int id, Categoria categoria)
         {
             if (id != categoria.CategoriaId)
             {
@@ -63,14 +64,14 @@ namespace APICatalogo.Controllers
                 return BadRequest("Dados inválidos");
             }
 
-            await _repository.UpdateAsync(categoria);
+           _repository.Update(categoria);
             return Ok(categoria);
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var categoria = await _repository.GetByIdAsync(id);
+            var categoria = _repository.Get(c=> c.CategoriaId ==id);
 
             if (categoria == null)
             {
@@ -78,7 +79,7 @@ namespace APICatalogo.Controllers
                 return NotFound($"Categoria com id={id} não encontrada...");
             }
 
-            await _repository.DeleteAsync(id);
+            _repository.Delete(categoria);
             return Ok(categoria);
         }
     }

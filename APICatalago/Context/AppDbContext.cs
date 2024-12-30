@@ -1,5 +1,5 @@
-﻿using APICatalago.Models;
-using APICatalogo.Models;
+﻿using APICatalogo.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace APICatalago.Context

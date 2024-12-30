@@ -1,10 +1,6 @@
 ﻿using APICatalogo.Models;
-using APICatalogo.Repositories;
-
+using APICatalogo.Repositories.PadraoUnitOfWork;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace APICatalogo.Controllers
 {
@@ -12,17 +8,15 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class ProdutosController : ControllerBase
     {
-        private readonly IProdutoRepository _produtoRepository;
-        private readonly IRepository<Produto> _repository;
+        private readonly IUnitOfWork _uof;
         private readonly ILogger<ProdutosController> _logger;
 
 
-        public ProdutosController(IRepository<Produto> repository, ILogger<ProdutosController> logger, IProdutoRepository produtoRepository)
+        public ProdutosController(ILogger<ProdutosController> logger, IUnitOfWork uof)
         {
-            _repository = repository;
-            _produtoRepository = produtoRepository;
-            _logger = logger;
 
+            _logger = logger;
+            _uof = uof;
         }
         [HttpGet("produtos/{id}")]
         public ActionResult<IEnumerable<Produto>> GetProdutosPorCategoria(int id)
@@ -39,7 +33,7 @@ namespace APICatalogo.Controllers
         [HttpGet("{id:int}", Name = "ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
-            var produto =_repository.Get(c=> c.ProdutoId== id);
+            var produto = _repository.Get(c => c.ProdutoId == id);
 
             if (produto == null)
             {
@@ -79,12 +73,12 @@ namespace APICatalogo.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            var produto = _repository.Get(p=> p.ProdutoId == id);
+            var produto = _repository.Get(p => p.ProdutoId == id);
 
             if (produto == null)
             {
                 _logger.LogWarning($"Produto com id={id} não encontrado...");
-                
+
             }
 
             _repository.Delete(produto);

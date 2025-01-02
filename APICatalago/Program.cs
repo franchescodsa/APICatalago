@@ -1,11 +1,10 @@
 
 using APICatalago.Context;
-using APICatalogo.Repositories;
 using APICatalogo.Extensions;
 using APICatalogo.Filters;
 using APICatalogo.Logging;
-using APICatalogo.Services;
-using Microsoft.AspNetCore.Mvc;
+using APICatalogo.Repositories;
+using APICatalogo.Repositories.PadraoUnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -13,7 +12,7 @@ namespace APICatalago
 {
     public class Program
     {
-        
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +26,7 @@ namespace APICatalago
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
-            
+
 
 
             builder.Services.AddEndpointsApiExplorer();
@@ -38,7 +37,7 @@ namespace APICatalago
             string mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-                                    options.UseMySql(mySqlConnection, 
+                                    options.UseMySql(mySqlConnection,
                                     ServerVersion.AutoDetect(mySqlConnection)));
 
             builder.Services.AddScoped<ApiLoggingFilter>();
@@ -46,6 +45,7 @@ namespace APICatalago
 
             builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
             /*Desabilitando mecanismo de inferencia da infeção de dependecia dos controladores

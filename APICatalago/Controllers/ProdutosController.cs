@@ -21,19 +21,19 @@ namespace APICatalogo.Controllers
         [HttpGet("produtos/{id}")]
         public ActionResult<IEnumerable<Produto>> GetProdutosPorCategoria(int id)
         {
-            return Ok(_produtoRepository.GetProdutosPorCategoria(id));
+            return Ok(_uof.ProdutoRepository.GetProdutosPorCategoria(id));
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Produto>> Get()
         {
-            return Ok(_repository.GetAll());
+            return Ok(_uof.ProdutoRepository.GetAll());
         }
 
         [HttpGet("{id:int}", Name = "ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
-            var produto = _repository.Get(c => c.ProdutoId == id);
+            var produto = _uof.ProdutoRepository.Get(c => c.ProdutoId == id);
 
             if (produto == null)
             {
@@ -52,7 +52,8 @@ namespace APICatalogo.Controllers
                 return BadRequest("Dados inválidos");
             }
 
-            _repository.Create(produto);
+            _uof.ProdutoRepository.Create(produto);
+            _uof.Commit();
 
             return new CreatedAtRouteResult("ObterProduto", new { id = produto.ProdutoId }, produto);
         }
@@ -66,14 +67,15 @@ namespace APICatalogo.Controllers
                 return BadRequest("Dados inválidos");
             }
 
-            _repository.Update(produto);
+            _uof.ProdutoRepository.Update(produto);
+            _uof.Commit();
             return Ok(produto);
         }
 
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            var produto = _repository.Get(p => p.ProdutoId == id);
+            var produto = _uof.ProdutoRepository.Get(p => p.ProdutoId == id);
 
             if (produto == null)
             {
@@ -81,7 +83,8 @@ namespace APICatalogo.Controllers
 
             }
 
-            _repository.Delete(produto);
+            _uof.ProdutoRepository.Delete(produto);
+            _uof.Commit();
             return Ok(produto);
         }
     }

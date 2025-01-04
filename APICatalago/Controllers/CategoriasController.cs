@@ -12,6 +12,7 @@ namespace APICatalogo.Controllers
         private readonly IUnitOfWork _uof;
         private readonly ILogger<CategoriasController> _logger;
 
+
         public CategoriasController(ILogger<CategoriasController> logger, IUnitOfWork uof)
         {
 

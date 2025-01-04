@@ -1,5 +1,6 @@
 
 using APICatalago.Context;
+using APICatalogo.DTOs.Mappings;
 using APICatalogo.Extensions;
 using APICatalogo.Filters;
 using APICatalogo.Logging;
@@ -46,6 +47,8 @@ namespace APICatalago
             builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(typeof(MapeamentoDTOautoMapper));
+
 
 
             /*Desabilitando mecanismo de inferencia da infeção de dependecia dos controladores

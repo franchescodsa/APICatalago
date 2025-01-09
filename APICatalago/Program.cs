@@ -26,7 +26,7 @@ namespace APICatalago
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-            });
+            }).AddNewtonsoftJson();
 
 
 

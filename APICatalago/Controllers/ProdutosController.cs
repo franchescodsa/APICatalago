@@ -2,6 +2,7 @@
 using APICatalogo.Models;
 using APICatalogo.Repositories.PadraoUnitOfWork;
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APICatalogo.Controllers
@@ -79,6 +80,46 @@ namespace APICatalogo.Controllers
 
             return new CreatedAtRouteResult("ObterProduto", new { id = novoProdutoDto.ProdutoId }, novoProdutoDto);
         }
+
+        [HttpPatch("{id:int}/UpdatePartial")]
+        //JsonPatchDocument<ProdutoDTOUpdateRequest> É um parametro que representa o objeto que será atualizado parcialmente
+        public ActionResult<ProdutoDTOUpdateResponse> Patch(int id, JsonPatchDocument<ProdutoDTOUpdateRequest> patchProdutoDTO)
+        {
+            if (patchProdutoDTO is null || id <= 0)
+            {
+                _logger.LogWarning($"Dados inválidos...");
+                return BadRequest("Dados inválidos");
+            }
+            var produto = _uof.ProdutoRepository.Get(p => p.ProdutoId == id);
+            if (produto == null)
+            {
+                _logger.LogWarning($"Produto com id={id} não encontrado...");
+                return NotFound($"Produto com id={id} não encontrado...");
+            }
+            var proutoUpdateRequest = _mapper.Map<ProdutoDTOUpdateRequest>(produto);
+
+            patchProdutoDTO.ApplyTo(proutoUpdateRequest, ModelState);
+
+            if (!TryValidateModel(proutoUpdateRequest))
+            {
+                return ValidationProblem();
+            }
+
+            _mapper.Map(proutoUpdateRequest, produto);
+            _uof.ProdutoRepository.Update(produto);
+            _uof.Commit();
+
+            return _mapper.Map<ProdutoDTOUpdateResponse>(produto);
+
+        }
+
+
+
+
+
+
+
+
 
         [HttpPut("{id:int}")]
         public ActionResult<ProdutoDTO> Put(int id, ProdutoDTO produtoDto)

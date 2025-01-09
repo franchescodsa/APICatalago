@@ -1,5 +1,6 @@
 ﻿using APICatalogo.DTOs;
 using APICatalogo.Models;
+using APICatalogo.Pagination;
 using APICatalogo.Repositories.PadraoUnitOfWork;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
@@ -45,6 +46,14 @@ namespace APICatalogo.Controllers
 
             return Ok(produtosDTO);
 
+        }
+
+        [HttpGet("pagination")]
+        public ActionResult<IEnumerable<ProdutoDTO>> Get([FromQuery] ProdutosParameters produtosParameters)
+        {
+            var produtos = _uof.ProdutoRepository.GetProdutos(produtosParameters);
+            var produtosDTO = _mapper.Map<IEnumerable<ProdutoDTO>>(produtos);
+            return Ok(produtosDTO);
         }
 
         [HttpGet("{id:int}", Name = "ObterProduto")]
